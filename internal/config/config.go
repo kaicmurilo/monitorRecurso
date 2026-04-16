@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -69,7 +70,7 @@ func Load() (Config, error) {
 	}
 
 	data, err := os.ReadFile(path)
-	if os.IsNotExist(err) {
+	if errors.Is(err, os.ErrNotExist) {
 		cfg := DefaultConfig()
 		return cfg, Save(cfg)
 	}
