@@ -37,24 +37,17 @@ func (e *Engine) UpdateThresholds(t config.Alerts) {
 	e.thresholds = t
 }
 
-// ForceExpireCooldown sets the last-fired time to t for a metric (used in tests).
-func (e *Engine) ForceExpireCooldown(metric string, t time.Time) {
-	e.mu.Lock()
-	defer e.mu.Unlock()
-	e.lastFired[metric] = t
-}
-
 // Check evaluates all metrics, fires OS notifications as needed, and returns fired alerts.
 func (e *Engine) Check(m collector.Metrics) []Alert {
 	e.mu.Lock()
-	defer e.mu.Unlock()
 
 	cooldown := time.Duration(e.thresholds.CooldownSeconds) * time.Second
 	var fired []Alert
+	var notifications []string // collected while locked, dispatched after unlock
 
 	fire := func(metric, msg string) {
 		fired = append(fired, Alert{Metric: metric, Message: msg})
-		_ = beeep.Notify("Monitor de Recursos", msg, "")
+		notifications = append(notifications, msg)
 		e.lastFired[metric] = time.Now()
 	}
 
@@ -64,6 +57,7 @@ func (e *Engine) Check(m collector.Metrics) []Alert {
 		}
 	}
 
+	// checkLow fires when value is at or below the threshold (e.g. battery low)
 	checkLow := func(metric string, value, threshold float64, msg string, active bool) {
 		if active && value <= threshold && time.Since(e.lastFired[metric]) > cooldown {
 			fire(metric, msg)
@@ -85,6 +79,13 @@ func (e *Engine) Check(m collector.Metrics) []Alert {
 	checkLow("Battery", m.BatteryPercent, e.thresholds.BatteryLow,
 		fmt.Sprintf("Bateria em %.0f%% — limite: %.0f%%", m.BatteryPercent, e.thresholds.BatteryLow),
 		m.HasBattery)
+
+	e.mu.Unlock()
+
+	// Dispatch OS notifications after releasing the lock to avoid blocking concurrent callers
+	for _, msg := range notifications {
+		_ = beeep.Notify("Monitor de Recursos", msg, "")
+	}
 
 	return fired
 }
