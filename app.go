@@ -2,26 +2,84 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"sync"
+	"time"
+
+	"monitorRecurso/internal/alert"
+	"monitorRecurso/internal/collector"
+	"monitorRecurso/internal/config"
 )
 
-// App struct
+// App is the Wails application struct. All exported methods are bound to JS.
 type App struct {
-	ctx context.Context
+	ctx    context.Context
+	mu     sync.RWMutex
+	latest collector.Metrics
+	cfg    config.Config
+	engine *alert.Engine
 }
 
-// NewApp creates a new App application struct
 func NewApp() *App {
-	return &App{}
+	cfg, _ := config.Load()
+	return &App{
+		cfg:    cfg,
+		engine: alert.NewEngine(cfg.Alerts),
+	}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	go a.collectLoop()
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) collectLoop() {
+	var (
+		prevSent     uint64
+		prevRecv     uint64
+		prevTimeNano int64
+	)
+	for {
+		a.mu.RLock()
+		interval := time.Duration(a.cfg.General.IntervalSeconds) * time.Second
+		a.mu.RUnlock()
+
+		time.Sleep(interval)
+
+		m, err := collector.Collect(prevSent, prevRecv, prevTimeNano)
+		if err != nil {
+			continue
+		}
+		prevSent = m.RawSent
+		prevRecv = m.RawRecv
+		prevTimeNano = m.RawTime
+
+		a.mu.Lock()
+		a.latest = m
+		a.mu.Unlock()
+
+		a.engine.Check(m)
+	}
+}
+
+// GetMetrics returns the latest metrics snapshot. Called by JS every tick.
+func (a *App) GetMetrics() collector.Metrics {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+	return a.latest
+}
+
+// GetConfig returns the current configuration to populate the context menu.
+func (a *App) GetConfig() config.Config {
+	a.mu.RLock()
+	defer a.mu.RUnlock()
+	return a.cfg
+}
+
+// SaveConfig persists new settings and hot-reloads thresholds and interval.
+func (a *App) SaveConfig(cfg config.Config) error {
+	a.mu.Lock()
+	a.cfg = cfg
+	a.engine.UpdateThresholds(cfg.Alerts)
+	a.mu.Unlock()
+	return config.Save(cfg)
 }
