@@ -27,13 +27,12 @@ func main() {
 	err = wails.Run(&options.App{
 		Title:            "Monitor de Recursos",
 		Width:            220,
-		Height:           270,
+		Height:           280,
 		MinWidth:         180,
-		MinHeight:        220,
+		MinHeight:        240,
 		Frameless:        true,
-		AlwaysOnTop:      cfg.General.AlwaysOnTop,
-		BackgroundColour: &options.RGBA{R: 26, G: 26, B: 46, A: 210},
-		DisableResize:    true,
+		AlwaysOnTop:      false,
+		BackgroundColour: &options.RGBA{R: 11, G: 11, B: 17, A: 237},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

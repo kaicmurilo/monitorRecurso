@@ -68,8 +68,10 @@ func (e *Engine) Check(m collector.Metrics) []Alert {
 		fmt.Sprintf("CPU em %.0f%% — limite: %.0f%%", m.CPUPercent, e.thresholds.CPUPercent))
 	checkHigh("RAM", m.RAMPercent, e.thresholds.RAMPercent,
 		fmt.Sprintf("RAM em %.0f%% — limite: %.0f%%", m.RAMPercent, e.thresholds.RAMPercent))
-	checkHigh("Disk", m.DiskPercent, e.thresholds.DiskPercent,
-		fmt.Sprintf("Disco em %.0f%% — limite: %.0f%%", m.DiskPercent, e.thresholds.DiskPercent))
+	for _, d := range m.Disks {
+		checkHigh("Disk:"+d.Path, d.Percent, e.thresholds.DiskPercent,
+			fmt.Sprintf("Disco %s em %.0f%% — limite: %.0f%%", d.Label, d.Percent, e.thresholds.DiskPercent))
+	}
 	checkHigh("CPUTemp", m.CPUTempCelsius, e.thresholds.CPUTempCelsius,
 		fmt.Sprintf("Temp CPU em %.0f°C — limite: %.0f°C", m.CPUTempCelsius, e.thresholds.CPUTempCelsius))
 	if m.HasGPU {

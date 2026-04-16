@@ -16,8 +16,8 @@ func TestDefaultConfig(t *testing.T) {
 	if cfg.General.Opacity != 0.85 {
 		t.Errorf("expected Opacity=0.85, got %f", cfg.General.Opacity)
 	}
-	if !cfg.General.AlwaysOnTop {
-		t.Error("expected AlwaysOnTop=true")
+	if cfg.General.AlwaysOnTop {
+		t.Error("expected AlwaysOnTop=false")
 	}
 	if cfg.Alerts.CPUPercent != 90 {
 		t.Errorf("expected CPUPercent=90, got %f", cfg.Alerts.CPUPercent)

@@ -8,6 +8,7 @@ import (
 	"monitorRecurso/internal/alert"
 	"monitorRecurso/internal/collector"
 	"monitorRecurso/internal/config"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App is the Wails application struct. All exported methods are bound to JS.
@@ -28,6 +29,7 @@ func NewApp(cfg config.Config) *App {
 
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+	runtime.WindowSetAlwaysOnTop(ctx, a.cfg.General.AlwaysOnTop)
 	go a.collectLoop()
 }
 
@@ -84,5 +86,6 @@ func (a *App) SaveConfig(cfg config.Config) error {
 	a.cfg = cfg
 	a.engine.UpdateThresholds(cfg.Alerts)
 	a.mu.Unlock()
+	runtime.WindowSetAlwaysOnTop(a.ctx, cfg.General.AlwaysOnTop)
 	return config.Save(cfg)
 }

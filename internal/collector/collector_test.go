@@ -17,8 +17,13 @@ func TestCollectReturnsValidRanges(t *testing.T) {
 	if m.RAMPercent < 0 || m.RAMPercent > 100 {
 		t.Errorf("RAMPercent out of range: %f", m.RAMPercent)
 	}
-	if m.DiskPercent < 0 || m.DiskPercent > 100 {
-		t.Errorf("DiskPercent out of range: %f", m.DiskPercent)
+	for _, d := range m.Disks {
+		if d.Percent < 0 || d.Percent > 100 {
+			t.Errorf("Disk %s percent out of range: %f", d.Label, d.Percent)
+		}
+		if d.TotalGB <= 0 {
+			t.Errorf("Disk %s TotalGB should be > 0, got %f", d.Label, d.TotalGB)
+		}
 	}
 	if m.NetUpBytesPerSec < 0 {
 		t.Error("NetUpBytesPerSec should not be negative")

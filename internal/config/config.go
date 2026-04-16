@@ -30,9 +30,22 @@ type Alerts struct {
 	BatteryLow      float64 `yaml:"battery_low"`
 }
 
+type Visible struct {
+	CPU     bool `yaml:"cpu"`
+	RAM     bool `yaml:"ram"`
+	Swap    bool `yaml:"swap"`
+	Temp    bool `yaml:"temp"`
+	Disk    bool `yaml:"disk"`
+	NetUp   bool `yaml:"net_up"`
+	NetDown bool `yaml:"net_down"`
+	GPU     bool `yaml:"gpu"`
+	Battery bool `yaml:"battery"`
+}
+
 type Config struct {
 	General General `yaml:"general"`
 	Alerts  Alerts  `yaml:"alerts"`
+	Visible Visible `yaml:"visible"`
 }
 
 func DefaultConfig() Config {
@@ -40,7 +53,7 @@ func DefaultConfig() Config {
 		General: General{
 			IntervalSeconds: 1,
 			Opacity:         0.85,
-			AlwaysOnTop:     true,
+			AlwaysOnTop:     false,
 			Position:        Position{X: 50, Y: 50},
 		},
 		Alerts: Alerts{
@@ -51,6 +64,10 @@ func DefaultConfig() Config {
 			CPUTempCelsius:  80,
 			GPUPercent:      95,
 			BatteryLow:      15,
+		},
+		Visible: Visible{
+			CPU: true, RAM: true, Swap: true, Temp: true, Disk: true,
+			NetUp: true, NetDown: true, GPU: true, Battery: true,
 		},
 	}
 }

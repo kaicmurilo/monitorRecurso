@@ -16,9 +16,9 @@ func defaultEngine() *alert.Engine {
 func TestNoAlertBelowThreshold(t *testing.T) {
 	e := defaultEngine()
 	fired := e.Check(collector.Metrics{
-		CPUPercent:  50,
-		RAMPercent:  60,
-		DiskPercent: 70,
+		CPUPercent: 50,
+		RAMPercent: 60,
+		Disks:      []collector.DiskInfo{{Path: "/", Label: "Root", Percent: 70}},
 	})
 	if len(fired) != 0 {
 		t.Errorf("expected no alerts, got %v", fired)

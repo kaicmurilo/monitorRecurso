@@ -8,49 +8,29 @@
 </head>
 <body>
   <div id="app" class="drag-region">
-    <div class="header">
-      <span class="title">SYS MONITOR</span>
-      <span class="settings-btn no-drag" id="settingsBtn" title="Configurações">⚙</span>
+
+    <!-- Drag handle -->
+    <div class="drag-handle drag-region">
+      <div class="grip-dots"></div>
     </div>
 
-    <div class="grid">
-      <div class="cell" id="cell-cpu">
-        <div class="value" id="val-cpu">--</div>
-        <div class="label">CPU</div>
-      </div>
-      <div class="cell" id="cell-ram">
-        <div class="value" id="val-ram">--</div>
-        <div class="label">RAM</div>
-      </div>
-      <div class="cell" id="cell-temp">
-        <div class="value" id="val-temp">--</div>
-        <div class="label">TEMP</div>
-      </div>
-      <div class="cell" id="cell-disk">
-        <div class="value" id="val-disk">--</div>
-        <div class="label">DISK</div>
-      </div>
-      <div class="cell" id="cell-netup">
-        <div class="value net-up" id="val-netup">--</div>
-        <div class="label">NET ↑</div>
-      </div>
-      <div class="cell" id="cell-netdown">
-        <div class="value net-down" id="val-netdown">--</div>
-        <div class="label">NET ↓</div>
-      </div>
-      <div class="cell" id="cell-gpu">
-        <div class="value" id="val-gpu">--</div>
-        <div class="label">GPU</div>
-      </div>
-      <div class="cell" id="cell-bat">
-        <div class="value" id="val-bat">--</div>
-        <div class="label">BAT</div>
-      </div>
+    <!-- Metric cards (built dynamically by JS) -->
+    <div id="grid" class="grid"></div>
+
+    <div class="footer drag-region">
+      <button class="gear no-drag" id="settingsBtn" title="Configurações">⚙</button>
+      <div class="resize-grip"></div>
     </div>
   </div>
 
-  <!-- Settings panel -->
-  <div id="ctxMenu" class="ctx-menu hidden" onclick="event.stopPropagation()">
+  <!-- Settings overlay -->
+  <div id="ctxMenu" class="ctx-menu hidden no-drag" onclick="event.stopPropagation()">
+    <div class="ctx-header">
+      <span class="ctx-title">Configurações</span>
+      <button class="ctx-close" id="closeSettings">✕</button>
+    </div>
+
+    <div class="ctx-section">Geral</div>
     <div class="ctx-row">
       <label>Opacidade</label>
       <input type="range" id="opacitySlider" min="10" max="100" value="85" />
@@ -58,19 +38,33 @@
     </div>
     <div class="ctx-row">
       <label>Intervalo (s)</label>
-      <input type="number" id="intervalInput" min="1" max="60" value="1" style="width:50px" />
+      <input type="number" id="intervalInput" min="1" max="60" value="1" />
     </div>
     <div class="ctx-row">
       <label>Sempre no topo</label>
       <input type="checkbox" id="alwaysOnTop" checked />
     </div>
+
+    <div class="ctx-sep"></div>
+    <div class="ctx-section">Visibilidade</div>
+    <div class="ctx-row"><label>CPU</label>        <input type="checkbox" id="visCPU"     checked /></div>
+    <div class="ctx-row"><label>RAM</label>         <input type="checkbox" id="visRAM"     checked /></div>
+    <div class="ctx-row"><label>Swap</label>        <input type="checkbox" id="visSwap"    checked /></div>
+    <div class="ctx-row"><label>Temperatura</label> <input type="checkbox" id="visTemp"    checked /></div>
+    <div class="ctx-row"><label>Discos</label>      <input type="checkbox" id="visDisk"    checked /></div>
+    <div class="ctx-row"><label>Rede ↑</label>      <input type="checkbox" id="visNetUp"   checked /></div>
+    <div class="ctx-row"><label>Rede ↓</label>      <input type="checkbox" id="visNetDown" checked /></div>
+    <div class="ctx-row"><label>GPU</label>         <input type="checkbox" id="visGPU"     checked /></div>
+    <div class="ctx-row"><label>Bateria</label>     <input type="checkbox" id="visBattery" checked /></div>
+
     <div class="ctx-sep"></div>
     <div class="ctx-section">Limites de alerta</div>
-    <div class="ctx-row"><label>CPU %</label>   <input type="number" id="threshCpu"  min="1" max="100" value="90" /></div>
-    <div class="ctx-row"><label>RAM %</label>   <input type="number" id="threshRam"  min="1" max="100" value="85" /></div>
-    <div class="ctx-row"><label>Disco %</label> <input type="number" id="threshDisk" min="1" max="100" value="90" /></div>
-    <div class="ctx-row"><label>Temp °C</label> <input type="number" id="threshTemp" min="1" max="120" value="80" /></div>
-    <div class="ctx-row"><label>Bat %</label>   <input type="number" id="threshBat"  min="1" max="50"  value="15" /></div>
+    <div class="ctx-row"><label>CPU</label>      <span class="ctx-unit">%</span>  <input type="number" id="threshCpu"  min="1" max="100" value="90" /></div>
+    <div class="ctx-row"><label>RAM</label>      <span class="ctx-unit">%</span>  <input type="number" id="threshRam"  min="1" max="100" value="85" /></div>
+    <div class="ctx-row"><label>Disco</label>    <span class="ctx-unit">%</span>  <input type="number" id="threshDisk" min="1" max="100" value="90" /></div>
+    <div class="ctx-row"><label>Temp</label>     <span class="ctx-unit">°C</span> <input type="number" id="threshTemp" min="1" max="120" value="80" /></div>
+    <div class="ctx-row"><label>Bateria</label>  <span class="ctx-unit">%</span>  <input type="number" id="threshBat"  min="1" max="50"  value="15" /></div>
+
     <div class="ctx-sep"></div>
     <div class="ctx-btn" id="saveBtn">Salvar</div>
     <div class="ctx-btn ctx-quit" id="quitBtn">Fechar app</div>
