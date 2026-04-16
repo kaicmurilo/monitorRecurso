@@ -1,0 +1,79 @@
+<h2>Arquitetura do Monitor de Recursos</h2>
+<p class="subtitle">Seção 1 de 3 — Estrutura geral do sistema</p>
+
+<div class="mockup">
+  <div class="mockup-header">Visão Geral dos Componentes</div>
+  <div class="mockup-body" style="font-family:monospace;font-size:12px;line-height:1.8;padding:20px;">
+
+    <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+
+      <!-- Collector -->
+      <div style="flex:1;min-width:180px;">
+        <div style="background:#1a1a2e;border:1px solid #e94560;border-radius:8px;padding:14px;">
+          <div style="color:#e94560;font-size:10px;letter-spacing:2px;margin-bottom:10px;">📊 COLLECTOR (Go)</div>
+          <div style="color:#a8a8b3;font-size:11px;line-height:1.8;">
+            <div>• gopsutil/v3</div>
+            <div>• CPU usage %</div>
+            <div>• RAM usage %</div>
+            <div>• Disk usage/IO</div>
+            <div>• Network rx/tx</div>
+            <div>• GPU (via nvml)</div>
+            <div>• CPU temperature</div>
+            <div>• Battery %</div>
+          </div>
+        </div>
+        <div style="text-align:center;color:#e94560;font-size:18px;margin:6px 0;">↓</div>
+        <div style="color:#a8a8b3;font-size:10px;text-align:center;">a cada 1s (configurável)</div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="display:flex;align-items:center;font-size:24px;color:#58a6ff;padding-top:30px;">→</div>
+
+      <!-- Alert Engine -->
+      <div style="flex:1;min-width:180px;">
+        <div style="background:#1a1a2e;border:1px solid #58a6ff;border-radius:8px;padding:14px;">
+          <div style="color:#58a6ff;font-size:10px;letter-spacing:2px;margin-bottom:10px;">🔔 ALERT ENGINE (Go)</div>
+          <div style="color:#a8a8b3;font-size:11px;line-height:1.8;">
+            <div>• Lê config.yaml</div>
+            <div>• Compara thresholds</div>
+            <div>• Cooldown por métrica</div>
+            <div>• Notif. nativa do OS</div>
+            <div style="margin-top:8px;color:#ffd700;font-size:10px;">Padrões:</div>
+            <div style="color:#ffd700;font-size:10px;">CPU &gt; 90%</div>
+            <div style="color:#ffd700;font-size:10px;">RAM &gt; 85%</div>
+            <div style="color:#ffd700;font-size:10px;">Disco &gt; 90%</div>
+            <div style="color:#ffd700;font-size:10px;">Temp &gt; 80°C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="display:flex;align-items:center;font-size:24px;color:#3fb950;padding-top:30px;">→</div>
+
+      <!-- UI (Wails) -->
+      <div style="flex:1;min-width:180px;">
+        <div style="background:#1a1a2e;border:1px solid #3fb950;border-radius:8px;padding:14px;">
+          <div style="color:#3fb950;font-size:10px;letter-spacing:2px;margin-bottom:10px;">🖥️ UI (Wails + JS)</div>
+          <div style="color:#a8a8b3;font-size:11px;line-height:1.8;">
+            <div>• Janela sem bordas</div>
+            <div>• Sempre no topo</div>
+            <div>• Arrastável</div>
+            <div>• Transparência config.</div>
+            <div>• Grid minimalista</div>
+            <div>• Menu de contexto</div>
+            <div>  (botão direito)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:24px;border-top:1px solid #21262d;padding-top:16px;">
+      <div style="color:#a8a8b3;font-size:10px;letter-spacing:1px;margin-bottom:8px;">📁 CONFIG FILE</div>
+      <div style="background:#0d1117;border-radius:6px;padding:10px;color:#3fb950;font-size:11px;">
+        <div><span style="color:#58a6ff;">~/.monitorrecurso/config.yaml</span> — thresholds, transparência, posição, intervalo de coleta</div>
+      </div>
+    </div>
+
+  </div>
+</div>

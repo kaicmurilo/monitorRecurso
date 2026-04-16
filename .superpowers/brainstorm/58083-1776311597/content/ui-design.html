@@ -1,0 +1,108 @@
+<h2>Design do Widget</h2>
+<p class="subtitle">Seção 2 de 3 — Layout do widget na área de trabalho</p>
+
+<div class="split">
+
+  <div class="mockup">
+    <div class="mockup-header">Widget Normal (modo compacto)</div>
+    <div class="mockup-body" style="display:flex;justify-content:center;align-items:center;padding:30px;background:#2d2d2d;">
+      <div style="background:#1a1a2e;border-radius:10px;padding:14px 18px;width:200px;box-shadow:0 4px 20px rgba(0,0,0,0.5);border-left:3px solid #e94560;">
+        <!-- Header -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="color:#e94560;font-size:8px;letter-spacing:2px;font-family:monospace;">SYS MONITOR</span>
+          <span style="color:#555;font-size:8px;cursor:pointer;">⚙</span>
+        </div>
+        <!-- Grid 2x4 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">42<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">CPU</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">71<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">RAM</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">38<span style="font-size:9px;color:#a8a8b3;">°C</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">TEMP</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">55<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">DISK</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#3fb950;font-size:14px;font-weight:700;font-family:monospace;">↑1.2<span style="font-size:8px;color:#a8a8b3;">M</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">NET UP</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#58a6ff;font-size:14px;font-weight:700;font-family:monospace;">↓3.8<span style="font-size:8px;color:#a8a8b3;">M</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">NET DW</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">23<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">GPU</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#ffd700;font-size:20px;font-weight:700;font-family:monospace;">87<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">BAT</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">Estado de Alerta (CPU crítica)</div>
+    <div class="mockup-body" style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;background:#2d2d2d;gap:16px;">
+      <!-- Widget com alerta -->
+      <div style="background:#1a1a2e;border-radius:10px;padding:14px 18px;width:200px;box-shadow:0 4px 20px rgba(233,69,96,0.4);border-left:3px solid #e94560;animation:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="color:#e94560;font-size:8px;letter-spacing:2px;font-family:monospace;">SYS MONITOR</span>
+          <span style="color:#e94560;font-size:9px;">⚠</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <!-- CPU em vermelho -->
+          <div style="text-align:center;background:rgba(233,69,96,0.1);border-radius:6px;padding:4px;">
+            <div style="color:#e94560;font-size:20px;font-weight:700;font-family:monospace;">94<span style="font-size:9px;">%</span></div>
+            <div style="color:#e94560;font-size:7px;letter-spacing:1px;">CPU ⚠</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">71<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">RAM</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">38<span style="font-size:9px;color:#a8a8b3;">°C</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">TEMP</div>
+          </div>
+          <div style="text-align:center;">
+            <div style="color:#fff;font-size:20px;font-weight:700;font-family:monospace;">55<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+            <div style="color:#a8a8b3;font-size:7px;letter-spacing:1px;">DISK</div>
+          </div>
+        </div>
+      </div>
+      <!-- Notificação OS -->
+      <div style="background:#2d2d2d;border:1px solid #555;border-radius:8px;padding:10px 14px;width:200px;box-shadow:0 2px 8px rgba(0,0,0,0.3);">
+        <div style="font-size:10px;color:#e94560;font-weight:600;margin-bottom:4px;">⚠ Monitor de Recursos</div>
+        <div style="font-size:10px;color:#ccc;">CPU em 94% — acima do limite de 90%</div>
+      </div>
+      <div style="color:#a8a8b3;font-size:10px;text-align:center;">↑ Notificação nativa do OS + célula CPU fica vermelha no widget</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top:20px;">
+  <h3>Menu de contexto (botão direito no widget)</h3>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div style="background:#1a1a2e;border:1px solid #333;border-radius:6px;padding:10px 14px;font-family:monospace;font-size:11px;color:#ccc;min-width:160px;">
+      <div style="padding:4px 0;border-bottom:1px solid #333;color:#a8a8b3;">⚙ Configurações</div>
+      <div style="padding:4px 0;border-bottom:1px solid #333;">🔲 Transparência: 80%</div>
+      <div style="padding:4px 0;border-bottom:1px solid #333;">📌 Sempre no topo: ON</div>
+      <div style="padding:4px 0;border-bottom:1px solid #333;">⏱ Intervalo: 1s</div>
+      <div style="padding:4px 0;color:#e94560;">✕ Fechar</div>
+    </div>
+    <div style="color:#a8a8b3;font-size:11px;max-width:260px;align-self:center;">
+      Clique direito abre menu flutuante. Transparência e intervalo ajustáveis em tempo real. Mudanças salvas automaticamente no <code style="color:#3fb950;">config.yaml</code>.
+    </div>
+  </div>
+</div>

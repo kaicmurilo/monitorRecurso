@@ -19,8 +19,7 @@ type App struct {
 	engine *alert.Engine
 }
 
-func NewApp() *App {
-	cfg, _ := config.Load()
+func NewApp(cfg config.Config) *App {
 	return &App{
 		cfg:    cfg,
 		engine: alert.NewEngine(cfg.Alerts),
@@ -43,7 +42,11 @@ func (a *App) collectLoop() {
 		interval := time.Duration(a.cfg.General.IntervalSeconds) * time.Second
 		a.mu.RUnlock()
 
-		time.Sleep(interval)
+		select {
+		case <-a.ctx.Done():
+			return
+		case <-time.After(interval):
+		}
 
 		m, err := collector.Collect(prevSent, prevRecv, prevTimeNano)
 		if err != nil {

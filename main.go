@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"log"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -17,10 +18,13 @@ import (
 var assets embed.FS
 
 func main() {
-	cfg, _ := config.Load()
-	app := NewApp()
+	cfg, err := config.Load()
+	if err != nil {
+		log.Printf("warning: could not load config: %v — using defaults", err)
+	}
+	app := NewApp(cfg)
 
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:            "Monitor de Recursos",
 		Width:            220,
 		Height:           270,

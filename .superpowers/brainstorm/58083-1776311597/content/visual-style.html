@@ -1,0 +1,90 @@
+<h2>Qual estilo visual combina melhor com o monitor?</h2>
+<p class="subtitle">Escolha o visual do widget que ficará na sua área de trabalho</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="dark" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0d1117;padding:16px;border-radius:8px;font-family:monospace;">
+      <div style="color:#58a6ff;font-size:11px;margin-bottom:6px;">● MONITOR</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:#8b949e;font-size:10px;">CPU</span>
+        <span style="color:#3fb950;font-size:10px;">42%</span>
+      </div>
+      <div style="background:#21262d;border-radius:3px;height:4px;margin-bottom:6px;">
+        <div style="background:#3fb950;width:42%;height:4px;border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:#8b949e;font-size:10px;">RAM</span>
+        <span style="color:#f0883e;font-size:10px;">71%</span>
+      </div>
+      <div style="background:#21262d;border-radius:3px;height:4px;margin-bottom:6px;">
+        <div style="background:#f0883e;width:71%;height:4px;border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:#8b949e;font-size:10px;">NET ↑</span>
+        <span style="color:#58a6ff;font-size:10px;">1.2 MB/s</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Dark Terminal</h3>
+      <p>Fundo escuro, texto colorido por métrica, barras de progresso. Discreto e funcional.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="glass" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05));backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);padding:16px;border-radius:12px;background-color:#667eea;">
+      <div style="color:rgba(255,255,255,0.9);font-size:11px;font-weight:600;margin-bottom:8px;letter-spacing:1px;">MONITOR</div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:rgba(255,255,255,0.7);font-size:10px;">CPU</span>
+        <span style="color:#fff;font-size:10px;font-weight:600;">42%</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:3px;height:4px;margin-bottom:6px;">
+        <div style="background:rgba(255,255,255,0.85);width:42%;height:4px;border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:rgba(255,255,255,0.7);font-size:10px;">RAM</span>
+        <span style="color:#ffd700;font-size:10px;font-weight:600;">71%</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:3px;height:4px;margin-bottom:6px;">
+        <div style="background:#ffd700;width:71%;height:4px;border-radius:3px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="color:rgba(255,255,255,0.7);font-size:10px;">NET ↑</span>
+        <span style="color:#7ee8fa;font-size:10px;font-weight:600;">1.2 MB/s</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Glassmorphism</h3>
+      <p>Visual moderno com vidro fosco, semi-transparente por padrão, sofisticado.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#1a1a2e;padding:16px;border-radius:8px;border-left:3px solid #e94560;">
+      <div style="color:#e94560;font-size:9px;letter-spacing:2px;margin-bottom:10px;">SYS MONITOR</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div style="text-align:center;">
+          <div style="color:#fff;font-size:16px;font-weight:700;">42<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+          <div style="color:#a8a8b3;font-size:8px;letter-spacing:1px;">CPU</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#fff;font-size:16px;font-weight:700;">71<span style="font-size:9px;color:#a8a8b3;">%</span></div>
+          <div style="color:#a8a8b3;font-size:8px;letter-spacing:1px;">RAM</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#fff;font-size:16px;font-weight:700;">1.2<span style="font-size:9px;color:#a8a8b3;">MB</span></div>
+          <div style="color:#a8a8b3;font-size:8px;letter-spacing:1px;">NET↑</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="color:#fff;font-size:16px;font-weight:700;">38<span style="font-size:9px;color:#a8a8b3;">°C</span></div>
+          <div style="color:#a8a8b3;font-size:8px;letter-spacing:1px;">TEMP</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Minimalista Grid</h3>
+      <p>Números grandes em grid compacto, sem barras. Máxima informação em mínimo espaço.</p>
+    </div>
+  </div>
+
+</div>
