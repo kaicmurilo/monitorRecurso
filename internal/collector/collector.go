@@ -1,6 +1,8 @@
 package collector
 
 import (
+	"runtime"
+	"strings"
 	"time"
 
 	bat "github.com/distatus/battery"
@@ -36,8 +38,8 @@ type Metrics struct {
 func Collect(prevSent, prevRecv uint64, prevTimeNano int64) (Metrics, error) {
 	var m Metrics
 
-	// CPU (200ms sample)
-	percents, err := cpu.Percent(200*time.Millisecond, false)
+	// CPU — non-blocking: returns delta since last gopsutil call
+	percents, err := cpu.Percent(0, false)
 	if err == nil && len(percents) > 0 {
 		m.CPUPercent = percents[0]
 	}
@@ -48,39 +50,47 @@ func Collect(prevSent, prevRecv uint64, prevTimeNano int64) (Metrics, error) {
 		m.RAMPercent = vm.UsedPercent
 	}
 
-	// Disk (root partition)
-	du, err := disk.Usage("/")
+	// Disk — cross-platform path
+	diskPath := "/"
+	if runtime.GOOS == "windows" {
+		diskPath = `C:\`
+	}
+	du, err := disk.Usage(diskPath)
 	if err == nil {
 		m.DiskPercent = du.UsedPercent
 	}
 
-	// CPU Temperature (best-effort)
+	// CPU Temperature — filter for CPU-related sensors
 	temps, err := host.SensorsTemperatures()
 	if err == nil {
 		for _, t := range temps {
-			if t.Temperature > 0 {
+			key := strings.ToLower(t.SensorKey)
+			if t.Temperature > 0 && (strings.Contains(key, "cpu") || strings.Contains(key, "core") || strings.Contains(key, "k10temp")) {
 				m.CPUTempCelsius = t.Temperature
 				break
 			}
 		}
 	}
 
-	// Network
-	netStats, err := gnet.IOCounters(false)
+	// Network — capture time before IO call so RawTime is always set
 	now := time.Now()
+	netStats, err := gnet.IOCounters(false)
+	m.RawTime = now.UnixNano() // always set, regardless of error
 	if err == nil && len(netStats) > 0 {
 		sent := netStats[0].BytesSent
 		recv := netStats[0].BytesRecv
 		if prevTimeNano > 0 {
 			elapsed := now.Sub(time.Unix(0, prevTimeNano)).Seconds()
 			if elapsed > 0 {
-				m.NetUpBytesPerSec = float64(sent-prevSent) / elapsed
-				m.NetDownBytesPerSec = float64(recv-prevRecv) / elapsed
+				if sent >= prevSent && recv >= prevRecv {
+					m.NetUpBytesPerSec = float64(sent-prevSent) / elapsed
+					m.NetDownBytesPerSec = float64(recv-prevRecv) / elapsed
+				}
+				// If counters reset, fields stay at 0.0 (safe fallback)
 			}
 		}
 		m.RawSent = sent
 		m.RawRecv = recv
-		m.RawTime = now.UnixNano()
 	}
 
 	// GPU (platform-specific stub — see gpu.go)
