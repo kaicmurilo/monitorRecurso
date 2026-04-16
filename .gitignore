@@ -18,6 +18,9 @@ node_modules
 .cursor/
 .superpowers/
 
+# Documentação / planeamento interno (não publicar)
+docs/
+
 # Memória local do projeto (não versionar — ver regras do repositório)
 CLAUDE.md
 .cursor-context.md
