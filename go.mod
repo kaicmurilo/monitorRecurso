@@ -47,4 +47,3 @@ require (
 	howett.net/plist v1.0.2-0.20250314012144-ee69052608d9 // indirect
 )
 
-// replace github.com/wailsapp/wails/v2 v2.12.0 => /Users/kaicmurilo/go/pkg/mod
