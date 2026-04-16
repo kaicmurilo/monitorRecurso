@@ -1,3 +1,27 @@
+# Build / artefatos
 build/bin
-node_modules
 frontend/dist
+node_modules
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# Ferramentas locais / IDE (não versionar preferências pessoais)
+.vscode/
+.idea/
+*.swp
+*~
+
+# Cursor / agentes (cache e contexto local)
+.cursor/
+.superpowers/
+
+# Memória local do projeto (não versionar — ver regras do repositório)
+CLAUDE.md
+.cursor-context.md
+
+# SO
+.DS_Store
+Thumbs.db
