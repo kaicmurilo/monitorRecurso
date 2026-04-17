@@ -11,7 +11,6 @@ docs/
 .vscode/
 .cursor/
 .superpowers/
-build/
 
 # Dev artifacts
 *.log

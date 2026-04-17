@@ -1,10 +1,11 @@
 {
   "name": "monitor-recurso",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Widget flutuante de monitoramento do sistema — CPU, RAM, Disco, Rede, GPU, Temperatura e Bateria",
   "files": [
     "bin/",
     "scripts/",
+    "build/",
     "README.md"
   ],
   "bin": {
