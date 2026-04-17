@@ -1,0 +1,35 @@
+{
+  "name": "monitor-recurso",
+  "version": "1.0.1",
+  "description": "Widget flutuante de monitoramento do sistema — CPU, RAM, Disco, Rede, GPU, Temperatura e Bateria",
+  "files": [
+    "bin/",
+    "scripts/",
+    "README.md"
+  ],
+  "bin": {
+    "monitor-recurso": "bin/cli.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "build": "wails build -clean",
+    "start": "node bin/cli.js start",
+    "stop": "node bin/cli.js stop",
+    "reload": "node bin/cli.js reload"
+  },
+  "keywords": [
+    "system-monitor",
+    "widget",
+    "desktop",
+    "cpu",
+    "ram",
+    "macos",
+    "linux",
+    "windows"
+  ],
+  "author": "Kaic Murilo <kaicmurilo@live.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  }
+}

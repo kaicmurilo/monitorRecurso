@@ -1,0 +1,17 @@
+# Go source (not needed at runtime — binary is built via postinstall or manual wails build)
+*.go
+go.mod
+go.sum
+internal/
+frontend/
+wails.json
+docs/
+
+# Artefatos locais / IDE / agentes (nunca publicar no npm)
+.vscode/
+.cursor/
+.superpowers/
+build/
+
+# Dev artifacts
+*.log

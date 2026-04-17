@@ -2,6 +2,7 @@
 build/bin
 frontend/dist
 node_modules
+*.tgz
 
 # Ambiente e segredos
 .env

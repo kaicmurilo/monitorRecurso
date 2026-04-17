@@ -2,7 +2,11 @@ package main
 
 import (
 	"embed"
+	"fmt"
 	"log"
+	"os"
+	"path/filepath"
+	"strconv"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -12,12 +16,37 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 
 	"monitorRecurso/internal/config"
+	"monitorRecurso/internal/singleinstance"
 )
 
 //go:embed all:frontend
 var assets embed.FS
 
+func pidPath() string {
+	home, _ := os.UserHomeDir()
+	return filepath.Join(home, ".monitorrecurso", "app.pid")
+}
+
+func writePID() {
+	p := pidPath()
+	_ = os.MkdirAll(filepath.Dir(p), 0755)
+	_ = os.WriteFile(p, []byte(strconv.Itoa(os.Getpid())), 0644)
+}
+
+func removePID() { _ = os.Remove(pidPath()) }
+
 func main() {
+	// Single instance — exit cleanly if already running
+	release, ok := singleinstance.Acquire()
+	if !ok {
+		fmt.Fprintln(os.Stderr, "monitor-recurso: already running")
+		os.Exit(0)
+	}
+	defer release()
+
+	writePID()
+	defer removePID()
+
 	cfg, err := config.Load()
 	if err != nil {
 		log.Printf("warning: could not load config: %v — using defaults", err)
