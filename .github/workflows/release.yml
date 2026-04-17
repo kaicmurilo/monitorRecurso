@@ -1,0 +1,83 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create GitHub Release
+        run: gh release create ${{ github.ref_name }} --title "${{ github.ref_name }}" --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-13
+            asset: monitor-recurso-darwin-amd64.tar.gz
+          - os: macos-latest
+            asset: monitor-recurso-darwin-arm64.tar.gz
+          - os: ubuntu-22.04
+            asset: monitor-recurso-linux-amd64.tar.gz
+          - os: windows-latest
+            asset: monitor-recurso-windows-amd64.zip
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc libgtk-3-dev libwebkit2gtk-4.0-dev
+
+      - name: Build (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: ~/go/bin/wails build -clean
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        run: wails build -clean
+        shell: pwsh
+
+      # ── Package ──────────────────────────────────────────────────────────
+
+      - name: Package macOS
+        if: runner.os == 'macOS'
+        run: tar -czf "${{ matrix.asset }}" -C build/bin monitorRecurso.app
+
+      - name: Package Linux
+        if: runner.os == 'Linux'
+        run: tar -czf "${{ matrix.asset }}" -C build/bin monitorRecurso
+
+      - name: Package Windows
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path build\bin\monitorRecurso.exe -DestinationPath "${{ matrix.asset }}"
+        shell: pwsh
+
+      # ── Upload ───────────────────────────────────────────────────────────
+
+      - name: Upload to release
+        run: gh release upload ${{ github.ref_name }} "${{ matrix.asset }}" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

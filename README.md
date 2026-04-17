@@ -6,7 +6,30 @@ Widget flutuante de monitoramento do sistema — CPU, RAM, Disco, Rede, GPU, Tem
 
 ---
 
-## Pré-requisitos
+## Instalação via npm (usuário final)
+
+Não requer Go, Wails ou qualquer dependência de build. O binário é baixado automaticamente do GitHub Releases.
+
+```bash
+npm install -g monitor-recurso
+```
+
+### Usar
+
+```bash
+monitor-recurso start                # inicia o widget em background
+monitor-recurso stop                 # para o widget
+monitor-recurso reload               # reinicia
+monitor-recurso status               # verifica se está rodando
+monitor-recurso autostart enable     # inicia automaticamente com o sistema
+monitor-recurso autostart disable    # remove inicialização automática
+```
+
+---
+
+## Desenvolvimento local
+
+### Pré-requisitos
 
 ```bash
 # Go 1.21+
@@ -19,38 +42,24 @@ go install github.com/wailsapp/wails/v2/cmd/wails@latest
 xcode-select --install
 
 # Linux: dependências do WebKitGTK
-# Ubuntu/Debian:
 sudo apt install libgtk-3-dev libwebkit2gtk-4.0-dev
 
 # Windows: WebView2 já vem com Windows 10/11
 ```
 
----
-
-## Dev local
+### Dev (hot-reload)
 
 ```bash
-# Clonar e entrar no projeto
-cd /Users/kaicmurilo/Documents/monitorRecurso
-
-# Rodar em modo dev (hot-reload do frontend, janela abre automaticamente)
 ~/go/bin/wails dev
 ```
 
-No modo dev:
-- O widget abre na tela com live-reload ao salvar `frontend/*.{html,css,js}`
-- O Go recompila automaticamente ao salvar `*.go`
-- Console do WebView disponível em **http://localhost:34115** no navegador
+- Widget abre com live-reload ao salvar `frontend/*.{html,css,js}`
+- Go recompila automaticamente ao salvar `*.go`
+- Console do WebView disponível em **http://localhost:34115**
 
----
-
-## Build de produção
+### Build de produção
 
 ```bash
-# Build para a plataforma atual
-~/go/bin/wails build
-
-# Build limpo (apaga binários anteriores)
 ~/go/bin/wails build -clean
 
 # Binário gerado em:
@@ -59,33 +68,27 @@ No modo dev:
 # Windows: build/bin/monitorRecurso.exe
 ```
 
-**macOS — abrir o app:**
-```bash
-open build/bin/monitorRecurso.app
-```
-
-**Linux:**
-```bash
-./build/bin/monitorRecurso
-```
-
 ---
 
-## Testes
+## Publicar nova versão
+
+O CI (GitHub Actions) builda os binários para todas as plataformas e cria o GitHub Release automaticamente ao fazer push de uma tag.
 
 ```bash
-go test ./... -v
+# 1. Atualizar version em package.json
+# 2. Criar e subir a tag
+git tag v1.0.2
+git push origin v1.0.2
+
+# 3. Após o CI terminar, publicar no npm
+npm publish
 ```
 
 ---
 
 ## Configuração
 
-O arquivo de configuração é criado automaticamente na primeira execução:
-
-```
-~/.monitorrecurso/config.yaml
-```
+Criado automaticamente em `~/.monitorrecurso/config.yaml` na primeira execução:
 
 ```yaml
 general:
@@ -114,14 +117,16 @@ Os limites também podem ser ajustados em tempo real pelo painel **⚙** no widg
 
 ```
 monitorRecurso/
-├── main.go                   # entry point Wails, opções da janela
-├── app.go                    # bridge Go ↔ JS (GetMetrics, GetConfig, SaveConfig)
+├── main.go                    # entry point Wails, opções da janela
+├── app.go                     # bridge Go ↔ JS (GetMetrics, GetConfig, SaveConfig)
 ├── internal/
-│   ├── collector/collector.go # coleta métricas via gopsutil
-│   ├── alert/alert.go         # engine de alertas com cooldown
-│   └── config/config.go       # load/save config.yaml
-└── frontend/
-    ├── index.html             # grid 2×4 + painel de configurações
-    ├── style.css              # tema escuro minimalista
-    └── main.js                # polling, formatação, controles
+│   ├── collector/collector.go  # coleta métricas via gopsutil
+│   ├── alert/alert.go          # engine de alertas com cooldown
+│   └── config/config.go        # load/save config.yaml
+├── frontend/
+│   ├── index.html              # grid 2×4 + painel de configurações
+│   ├── style.css               # tema escuro minimalista
+│   └── main.js                 # polling, formatação, controles
+├── bin/cli.js                  # CLI npm (start/stop/reload/status/autostart)
+└── scripts/postinstall.js      # download automático do binário no npm install
 ```
